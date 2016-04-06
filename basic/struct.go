@@ -10,8 +10,8 @@ type Point struct {
     X, Y float64
 }
 
-func (p *Point) Display() {
-    fmt.Println("x = ", p.X, " y = ", p.Y)
+func (p *Point) String() string {
+    return fmt.Sprintf("<Point: %v, %v>", p.X, p.Y)
 }
 
 func (p *Point) AddVector(p2 *Point) {
@@ -41,17 +41,19 @@ func (c *Circle) Translate(offset *Point) {
 
 func main() {
     center := Point{4.0, 5.0}
-    center.Display()
+    // why doesn't this work with the stinger interface?
+    fmt.Println(center)
+    fmt.Println(&center)
 
     circle := Circle{Center: center, Radius: 5.0}
     right := circle.Surface(0.0)
-    right.Display()
+    fmt.Println(right)
 
     bottomLeft := circle.Surface(math.Pi * 1.25)
-    bottomLeft.Display()
+    fmt.Println(bottomLeft)
 
     down := circle.Surface(math.Pi * 1.5)
-    down.Display()
+    fmt.Println(down)
 
     fmt.Println("   moving...")
     // now, radius 10, centered at (0, 10)
@@ -59,9 +61,9 @@ func main() {
     circle.Translate(&Point{-4.0, 5.0})
     newDown := circle.Surface(math.Pi * 1.5)
     // should be 0, 0
-    newDown.Display()
+    fmt.Println(newDown)
 
     // should be 10, 10
     newRight := circle.Surface(0.0)
-    newRight.Display()
+    fmt.Println(newRight)
 }
