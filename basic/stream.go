@@ -3,7 +3,7 @@ package main
 import (
 //  "fmt"
   "os"
-// "strings"
+"strings"
   "io"
 )
 
@@ -37,7 +37,7 @@ type Rot13Reader struct {
 }
 
 func Rot13(ch byte) byte {
-    for _, offset := range [2]byte{64, 96} {
+    for _, offset := range []byte{64, 96} {
         if offset < ch && ch < offset+27 {
             return (ch - offset + 13) % 26 + offset
         }
@@ -55,8 +55,8 @@ func (r *Rot13Reader) Read(out []byte) (int, error) {
 
 
 func main() {
-    data := MyReader{30}
-    // data := strings.NewReader("Hello, World!")
+    // data := MyReader{30}
+    data := strings.NewReader("Hello, World!")
     filter := Rot13Reader{&data}
     // original := Rot13Reader{&filter}
 
