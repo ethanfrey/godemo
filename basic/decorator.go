@@ -8,18 +8,20 @@ type Op interface {
     Mult(int) int
 }
 
+type Trans func(int) int
+
 func square(in int) int {
     return in * in
 }
 
-func double_in(orig func(int) int) func(int) int {
+func double_in(orig Trans) Trans {
     wrap := func (in int) int {
         return orig(in * 2)
     }
     return wrap
 }
 
-func double_out(orig func(int) int) func(int) int {
+func double_out(orig Trans) Trans {
     wrap := func (in int) int {
         return 2 * orig(in)
     }
