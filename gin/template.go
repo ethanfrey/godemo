@@ -10,14 +10,14 @@ func setUpStatic(r *gin.Engine) {
 }
 
 func index(c *gin.Context) {
-    c.HTML(200, "base.html", gin.H{
+    c.HTML(200, "index.html", gin.H{
         "title": "My Awesome Index",
         "current": "index",
         })
 }
 
 func info(c *gin.Context) {
-    c.HTML(200, "base.html", gin.H{
+    c.HTML(200, "info.html", gin.H{
         "title": "Some special info",
         "current": "info",
         })
