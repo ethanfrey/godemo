@@ -52,7 +52,7 @@ func main() {
         "upper": strings.ToUpper, // A custom template function
     }
 
-    loadHTMLGlob(r, "templates/*.html", templateFilters)
+    loadHTMLGlob(r, "templates/static/*.html", templateFilters)
     r.GET("/", index)
     r.GET("/info", info)
 
