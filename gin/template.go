@@ -1,6 +1,10 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+    "html/template"
+    "strings"
+    "github.com/gin-gonic/gin"
+)
 
 func setUpStatic(r *gin.Engine) {
     r.Static("/js", "./js")
@@ -20,24 +24,52 @@ func info(c *gin.Context) {
     c.HTML(200, "info.html", gin.H{
         "title": "Some special info",
         "current": "info",
-        })
+//        "data": map[string]string{
+        "data": gin.H{
+            "foo": "bar",
+            "more": "stuff",
+            "for": "you",
+        },
+    })
 }
 
 func privateData(c *gin.Context) {
     c.String(200, "private data")
 }
 
+// Modified code from gin.LoadHTMLGlob
+// see https://github.com/gin-gonic/gin/issues/449
+func loadHTMLGlob(engine *gin.Engine, pattern string, funcMap template.FuncMap) {
+    templ := template.Must(template.New("").Funcs(funcMap).ParseGlob(pattern))
+    engine.SetHTMLTemplate(templ)
+}
+
 func main() {
     r := gin.Default()
     setUpStatic(r)
 
-    r.LoadHTMLGlob("templates/*.html")
+    templateFilters := template.FuncMap{
+        "upper": strings.ToUpper, // A custom template function
+    }
+
+    loadHTMLGlob(r, "templates/*.html", templateFilters)
     r.GET("/", index)
     r.GET("/info", info)
 
     private := r.Group("/private")
     private.GET("data", privateData)
 
-    r.Run(":7890")
-//    r.RunTLS(":7891")
+    // r.Run(":7890")
+    certFile := "./certs/certificate.pem"
+    keyFile := "./certs/localhost_key.pem"
+    r.RunTLS(":7891", certFile, keyFile)
 }
+
+/*
+Making certs...
+https://certsimple.com/blog/localhost-ssl-fix
+
+openssl pkcs12 -in Certificates.p12 -out Certificates.pem -nodes
+openssl x509 -inform der -in localhost_cert.cer -out certificate.pem
+
+*/

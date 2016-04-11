@@ -2,4 +2,10 @@
 
 <h1>Info page here!</h1>
 
+<ul>
+{{ range $k, $v := .data }}
+<li>{{$k | upper}} = {{$v}}</li>
+{{ end }}
+</ul>
+
 {{ template "footer" . }}
