@@ -5,6 +5,7 @@ import (
     "strings"
     "github.com/gin-gonic/gin"
     "gopkg.in/redis.v3"
+//    "gopkg.in/redsync.v1"  // TODO: use
 )
 
 var client *redis.Client
