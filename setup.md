@@ -46,6 +46,10 @@ If you want the dependency graph:
 ```
 go get github.com/kisielk/godepgraph
 brew install graphviz
+
+# for example, if you go get this, then...
+godepgraph -s github.com/ojrac/asphodel-go | dot -Tpng -o asph-godepgraph.png
+open asph-godepgraph.png
 ```
 
 
