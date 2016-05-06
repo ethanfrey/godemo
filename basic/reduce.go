@@ -4,41 +4,25 @@ import (
 	"fmt"
 )
 
-type IntReducer interface {
-	Init() int
-	Reduce(int, int) int
+type IntReducer func(int, int) int
+
+func Sum(x, total int) int {
+	return x + total
 }
 
-type IntSummer struct{}
-
-func (IntSummer) Init() int {
-	return 0
+func Mult(x, total int) int {
+	return x * total
 }
 
-func (IntSummer) Reduce(a, b int) int {
-	return a + b
-}
-
-type IntMult struct{}
-
-func (IntMult) Init() int {
-	return 1
-}
-
-func (IntMult) Reduce(a, b int) int {
-	return a * b
-}
-
-func IntReduce(data []int, reducer IntReducer) int {
-	total := reducer.Init()
+func IntReduce(data []int, reducer IntReducer, total int) int {
 	for _, el := range data {
-		total = reducer.Reduce(el, total)
+		total = reducer(el, total)
 	}
 	return total
 }
 
 func main() {
 	data := []int{1, 2, 3, 4, 5}
-	fmt.Println(IntReduce(data, IntSummer{}))
-	fmt.Println(IntReduce(data, IntMult{}))
+	fmt.Println(IntReduce(data, Sum, 0))
+	fmt.Println(IntReduce(data, Mult, 1))
 }
