@@ -4,20 +4,15 @@ type RequestContext interface {
 	RequestName() string
 }
 
-type MainContext interface {
-	RequestContext
-	MainController
-}
-
 type BasicContext struct {
 	Name string
 }
 
-type RealContext struct {
-	*BasicContext
-	*MainControl
-}
-
 func (c *BasicContext) RequestName() string {
 	return c.Name
+}
+
+// NewContext should really take a request object, this is just and example
+func NewContext(req string) RequestContext {
+	return &BasicContext{req}
 }
