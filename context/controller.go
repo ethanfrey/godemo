@@ -8,29 +8,44 @@ type Logger interface {
 
 type MainController interface {
 	Logger
-	ContollerName() string
+	ControllerName() string
+	NewContext(string) MainContext
 }
 
-type MainControl struct {
+type mainController struct {
 	Prefix string
 }
 
-type MainContext struct {
+type MainContext interface {
 	RequestContext
-	*MainControl
+	MainController
 }
 
-func (m *MainControl) Log(msg string) {
+type mainContext struct {
+	RequestContext
+	MainController
+}
+
+func (m *mainController) Log(msg string) {
 	fmt.Println(m.Prefix, ":", msg)
 }
 
-func (m *MainControl) ControllerName() string {
+func (m *mainController) ControllerName() string {
 	return "MainControl"
 }
 
-func (m *MainControl) NewMainContext(req string) *MainContext {
-	return &MainContext{
+// NewContext is called for each request that is handler by
+// this controller
+func (m *mainController) NewContext(req string) MainContext {
+	// TODO: we can do a bit more customization that just appending
+	// the two types if we wish here
+	return &mainContext{
 		NewContext(req),
 		m,
 	}
+}
+
+// NewController is called in the setup of the app
+func NewController(prefix string) MainController {
+	return &mainController{prefix}
 }
